@@ -49,7 +49,7 @@ class HomeView extends GetView<HomeViewCTL> {
                 // width: SizeConfig.blockSizeHorizontal * 40,
                 child: Center(
                   child: Text(
-                    "Sleep Scenes",
+                    "🌙 Calm & Relaxing Vibes",
                     style: TextStyle(
                         fontSize: SizeConfig.blockSizeHorizontal * 6,
                         color: Colors.white,

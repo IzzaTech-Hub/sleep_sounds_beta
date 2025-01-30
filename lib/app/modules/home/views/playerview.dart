@@ -292,7 +292,7 @@ class PlayerViewer extends GetView<PlayerViewCTL> {
             Container(
               width: SizeConfig.blockSizeHorizontal * 85,
               child: Text(
-                "Sleep music for relax calm and meditations Use headsets for better performance",
+                "Let the calming sounds guide you to a deep, restful sleep. Use headphones for the best experience.",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,

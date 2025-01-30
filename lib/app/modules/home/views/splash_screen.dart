@@ -57,7 +57,7 @@ class SplashScreen extends GetView<SplashController> {
                             fontWeight: FontWeight.bold)),
                   ),
                   verticalSpace(SizeConfig.blockSizeVertical * 1),
-                  Text("Relaxing Sounds for Sleeping",
+                  Text("Relaxing Melodies for Sleep",
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: SizeConfig.blockSizeHorizontal * 4,

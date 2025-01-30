@@ -331,8 +331,8 @@ class CustomSoundView extends GetView<CustomSoundCTL> {
                   // color: Color(0xBB000A1F),
                   gradient: LinearGradient(
                       colors: controller.selectedSounds.contains(customSound)
-                          ? [Color(0xFF124455), Colors.white60]
-                          : [Color(0xFF010C21), Color(0xFF124455)],
+                          ? [Color(0xFF085046), Colors.white60]
+                          : [Color(0xFF010C21), Color(0xFF085046)],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter),
                   borderRadius:

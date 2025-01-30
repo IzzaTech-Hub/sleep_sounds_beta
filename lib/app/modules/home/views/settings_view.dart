@@ -93,10 +93,10 @@ class SettingsView extends GetView<SettingsCTL> {
                 color: Colors.white),
           ),
           Text(
-            "Version: 1.0.3",
+            "Version: 1.0.1",
             style: TextStyle(
                 fontSize: SizeConfig.blockSizeHorizontal * 3,
-                color: Colors.white),
+                color: Colors.orange),
           )
         ]),
       )
@@ -132,7 +132,7 @@ class SettingsView extends GetView<SettingsCTL> {
                 text2,
                 style: TextStyle(
                     fontSize: SizeConfig.blockSizeHorizontal * 3,
-                    color: Colors.blue),
+                    color: Colors.orange),
               )
             ],
           ),
