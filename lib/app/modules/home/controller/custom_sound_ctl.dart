@@ -2,20 +2,31 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:sleep_sounds_beta/app/data/just_audio_model.dart';
 import 'package:sleep_sounds_beta/app/data/more_sounds_model.dart';
 import 'package:sleep_sounds_beta/app/modules/utills/images.dart';
 import 'package:sleep_sounds_beta/app/modules/utills/sounds.dart';
+import 'dart:developer' as developer;
 
 class CustomSoundCTL extends GetxController {
-  RxList<MoreSoundsModel> rain = <MoreSoundsModel>[].obs;
-  RxList<MoreSoundsModel> nature = <MoreSoundsModel>[].obs;
-  RxList<MoreSoundsModel> animal = <MoreSoundsModel>[].obs;
-  RxList<MoreSoundsModel> transport = <MoreSoundsModel>[].obs;
-  RxList<MoreSoundsModel> cafe = <MoreSoundsModel>[].obs;
-  RxList<MoreSoundsModel> whitenoise = <MoreSoundsModel>[].obs;
-  RxList<MoreSoundsModel> meditation = <MoreSoundsModel>[].obs;
+  RxList<MoreSoundsModel> moreSoundsRain = <MoreSoundsModel>[].obs;
+  RxList<MoreSoundsModel> moreSoundsNature = <MoreSoundsModel>[].obs;
+  RxList<MoreSoundsModel> moreSoundsAnimal = <MoreSoundsModel>[].obs;
+  RxList<MoreSoundsModel> moreSoundsTransport = <MoreSoundsModel>[].obs;
+  RxList<MoreSoundsModel> moreSoundsCafe = <MoreSoundsModel>[].obs;
+  RxList<MoreSoundsModel> moreSoundsWhitenoise = <MoreSoundsModel>[].obs;
+  RxList<MoreSoundsModel> moreSoundsMeditation = <MoreSoundsModel>[].obs;
+
+  RxList<JustAudioModel> justAudioRain = <JustAudioModel>[].obs;
+  RxList<JustAudioModel> justAudioNature = <JustAudioModel>[].obs;
+  RxList<JustAudioModel> justAudioAnimal = <JustAudioModel>[].obs;
+  RxList<JustAudioModel> justAudioTransport = <JustAudioModel>[].obs;
+  RxList<JustAudioModel> justAudioCafe = <JustAudioModel>[].obs;
+  RxList<JustAudioModel> justAudioWhitenoise = <JustAudioModel>[].obs;
+  RxList<JustAudioModel> justAudioMeditation = <JustAudioModel>[].obs;
 
   RxList<MoreSoundsModel> selectedSounds = <MoreSoundsModel>[].obs;
+  RxList<MoreSoundsModel> justAudioSelectedSounds = <MoreSoundsModel>[].obs;
 
   Rx<bool> isPlaying = false.obs;
   AudioCache player = AudioCache();
@@ -28,7 +39,8 @@ class CustomSoundCTL extends GetxController {
   // Rx<String> Icon = "".obs;
   // Rx<String> title = "".obs;
 
-  startAudioAndVibration(MoreSoundsModel sound) async {
+  startAudioAndVibration(
+      MoreSoundsModel moreSounds, JustAudioModel justAudio) async {
     isPlaying.value = true;
     check.value = true;
 //     // AudioCache();
@@ -45,20 +57,21 @@ class CustomSoundCTL extends GetxController {
 //       // Vibration.cancel();
 //       isPlaying.value = false;
 //     });
-  sound.audioPlayer = AudioPlayer();
+    // sound.audioPlayer = AudioPlayer();
 
     if (isLoop.value) {
-      await sound.audioPlayer!.setSource(AssetSource(sound.sound.value));
-      await sound.audioPlayer!.setReleaseMode(ReleaseMode.loop);
-      await sound.audioPlayer!.resume();
+      await moreSounds.audioPlayer!
+          .setSource(AssetSource(moreSounds.sound.value));
+      await moreSounds.audioPlayer!.setReleaseMode(ReleaseMode.loop);
+      await moreSounds.audioPlayer!.resume();
     } else {
-      print("value of t ${sound.sound.value}");
-      await sound.audioPlayer!.play(AssetSource(sound.sound.value));
+      print("value of t ${moreSounds.sound.value}");
+      await moreSounds.audioPlayer!.play(AssetSource(moreSounds.sound.value));
     }
 
-    sound.audioPlayer!.onPlayerComplete.listen((event) {
+    moreSounds.audioPlayer!.onPlayerComplete.listen((event) {
       isPlaying.value = false;
-      sound.isPlaying.value = false;
+      moreSounds.isPlaying.value = false;
     });
 
     // audioTimer = Timer(Duration(seconds: selectedDuration.value), () {
@@ -71,17 +84,16 @@ class CustomSoundCTL extends GetxController {
 
     // String? abc = countDownController.getTime();
     // print("abc ${abc}");
-
-   
   }
 
   // Function to stop the playback of a specific sound
-  void stopSound(MoreSoundsModel sound) {
-    if (sound.audioPlayer != null) {
-      sound.audioPlayer!.stop();
-      if (selectedSounds.length <= 0) {
-      // if (selectedSounds.isEmpty) {
-        sound.isPlaying.value = false;
+  void stopSound(MoreSoundsModel moreSounds, JustAudioModel justAudio) {
+    if (moreSounds.audioPlayer != null) {
+      moreSounds.audioPlayer!.stop();
+      if (selectedSounds.length <= 0 && justAudioSelectedSounds.length <= 0) {
+        // if (selectedSounds.isEmpty) {
+        moreSounds.isPlaying.value = false;
+        justAudio.isPlaying.value = false;
       }
     }
   }
@@ -93,6 +105,7 @@ class CustomSoundCTL extends GetxController {
     super.onInit();
 
     fillMoreSounds();
+    fillJustAudio();
     // more_sound = (Get.arguments as MoreSoundsModel).obs;
     // title.value = more_sound!.value.name;
     // Icon.value = more_sound!.value.icon.value;
@@ -202,7 +215,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    rain.add(lightrain);
+    moreSoundsRain.add(lightrain);
 
     MoreSoundsModel heavyrain = MoreSoundsModel(
       name: "Heavy Rain",
@@ -211,7 +224,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    rain.add(heavyrain);
+    moreSoundsRain.add(heavyrain);
 
     MoreSoundsModel thunder = MoreSoundsModel(
       name: "Thunder",
@@ -220,7 +233,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    rain.add(thunder);
+    moreSoundsRain.add(thunder);
 
     MoreSoundsModel roofrain = MoreSoundsModel(
       name: "Rain on Roof",
@@ -229,7 +242,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    rain.add(roofrain);
+    moreSoundsRain.add(roofrain);
 
     MoreSoundsModel windowrain = MoreSoundsModel(
       name: "Rain on Window",
@@ -238,7 +251,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    rain.add(windowrain);
+    moreSoundsRain.add(windowrain);
 
     MoreSoundsModel snow = MoreSoundsModel(
       name: "Snow",
@@ -247,7 +260,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    rain.add(snow);
+    moreSoundsRain.add(snow);
 
     MoreSoundsModel umbrellarain = MoreSoundsModel(
       name: "Rain on Umbrella",
@@ -256,7 +269,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    rain.add(umbrellarain);
+    moreSoundsRain.add(umbrellarain);
 
     MoreSoundsModel tentrain = MoreSoundsModel(
       name: "Rain on Tent",
@@ -265,7 +278,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    rain.add(tentrain);
+    moreSoundsRain.add(tentrain);
 
     MoreSoundsModel puddle = MoreSoundsModel(
       name: "puddle",
@@ -274,7 +287,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    rain.add(puddle);
+    moreSoundsRain.add(puddle);
 
     // Nature
 
@@ -285,7 +298,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    nature.add(birdforest);
+    moreSoundsNature.add(birdforest);
 
     MoreSoundsModel lake = MoreSoundsModel(
       name: "Lake",
@@ -294,7 +307,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    nature.add(lake);
+    moreSoundsNature.add(lake);
 
     MoreSoundsModel creek = MoreSoundsModel(
       name: "Creek",
@@ -303,7 +316,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    nature.add(creek);
+    moreSoundsNature.add(creek);
 
     MoreSoundsModel forest = MoreSoundsModel(
       name: "Forest",
@@ -312,7 +325,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    nature.add(forest);
+    moreSoundsNature.add(forest);
 
     MoreSoundsModel windleaves = MoreSoundsModel(
       name: "Wind Leaves",
@@ -321,7 +334,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    nature.add(windleaves);
+    moreSoundsNature.add(windleaves);
 
     MoreSoundsModel wind = MoreSoundsModel(
       name: "Wind",
@@ -330,7 +343,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    nature.add(wind);
+    moreSoundsNature.add(wind);
 
     MoreSoundsModel waterfall = MoreSoundsModel(
       name: "WaterFall",
@@ -339,7 +352,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    nature.add(waterfall);
+    moreSoundsNature.add(waterfall);
 
     MoreSoundsModel drip = MoreSoundsModel(
       name: "Drip",
@@ -348,7 +361,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    nature.add(drip);
+    moreSoundsNature.add(drip);
 
     MoreSoundsModel underwater = MoreSoundsModel(
       name: "UnderWater",
@@ -357,7 +370,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    nature.add(underwater);
+    moreSoundsNature.add(underwater);
 
     MoreSoundsModel farm = MoreSoundsModel(
       name: "Farm",
@@ -366,7 +379,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    nature.add(farm);
+    moreSoundsNature.add(farm);
 
     MoreSoundsModel grassland = MoreSoundsModel(
       name: "Grassland",
@@ -375,7 +388,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    nature.add(grassland);
+    moreSoundsNature.add(grassland);
 
     MoreSoundsModel fire = MoreSoundsModel(
       name: "Fire",
@@ -384,7 +397,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    nature.add(fire);
+    moreSoundsNature.add(fire);
 
     // Animal
 
@@ -395,7 +408,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    animal.add(bird);
+    moreSoundsAnimal.add(bird);
 
     MoreSoundsModel bird2 = MoreSoundsModel(
       name: "Bird2",
@@ -404,7 +417,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    animal.add(bird2);
+    moreSoundsAnimal.add(bird2);
 
     MoreSoundsModel seagull = MoreSoundsModel(
       name: "Seagull",
@@ -413,7 +426,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    animal.add(seagull);
+    moreSoundsAnimal.add(seagull);
 
     MoreSoundsModel frog = MoreSoundsModel(
       name: "Frog",
@@ -422,7 +435,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    animal.add(frog);
+    moreSoundsAnimal.add(frog);
 
     MoreSoundsModel frog2 = MoreSoundsModel(
       name: "Frog2",
@@ -431,7 +444,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    animal.add(frog2);
+    moreSoundsAnimal.add(frog2);
 
     MoreSoundsModel cricket = MoreSoundsModel(
       name: "Cricket",
@@ -440,7 +453,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    animal.add(cricket);
+    moreSoundsAnimal.add(cricket);
 
     MoreSoundsModel cicada = MoreSoundsModel(
       name: "Cicada",
@@ -449,7 +462,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    animal.add(cicada);
+    moreSoundsAnimal.add(cicada);
 
     MoreSoundsModel wolf = MoreSoundsModel(
       name: "Wolf",
@@ -458,7 +471,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    animal.add(wolf);
+    moreSoundsAnimal.add(wolf);
 
     MoreSoundsModel loon = MoreSoundsModel(
       name: "Loon",
@@ -467,7 +480,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    animal.add(loon);
+    moreSoundsAnimal.add(loon);
 
     // Transport
 
@@ -478,7 +491,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    transport.add(train);
+    moreSoundsTransport.add(train);
 
     MoreSoundsModel car = MoreSoundsModel(
       name: "Car",
@@ -487,7 +500,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    transport.add(car);
+    moreSoundsTransport.add(car);
 
     MoreSoundsModel airplane = MoreSoundsModel(
       name: "Airplane",
@@ -496,7 +509,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    transport.add(airplane);
+    moreSoundsTransport.add(airplane);
 
     // Cafe and Instrument
 
@@ -507,7 +520,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    cafe.add(cafee);
+    moreSoundsCafe.add(cafee);
 
     MoreSoundsModel crowd = MoreSoundsModel(
       name: "Crowd",
@@ -516,7 +529,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    cafe.add(crowd);
+    moreSoundsCafe.add(crowd);
 
     MoreSoundsModel heartbeat = MoreSoundsModel(
       name: "Heart Beat",
@@ -525,7 +538,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    cafe.add(heartbeat);
+    moreSoundsCafe.add(heartbeat);
 
     MoreSoundsModel construction = MoreSoundsModel(
       name: "Construction Site",
@@ -534,7 +547,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    cafe.add(construction);
+    moreSoundsCafe.add(construction);
 
     MoreSoundsModel lullaby = MoreSoundsModel(
       name: "Lullaby",
@@ -543,7 +556,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    cafe.add(lullaby);
+    moreSoundsCafe.add(lullaby);
 
     MoreSoundsModel dryer = MoreSoundsModel(
       name: "Dryer",
@@ -552,7 +565,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    cafe.add(dryer);
+    moreSoundsCafe.add(dryer);
 
     MoreSoundsModel hairdryer = MoreSoundsModel(
       name: "Hair Dryer",
@@ -561,7 +574,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    cafe.add(hairdryer);
+    moreSoundsCafe.add(hairdryer);
 
     MoreSoundsModel vaccum = MoreSoundsModel(
       name: "Vacuum Cleaner",
@@ -570,7 +583,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    cafe.add(vaccum);
+    moreSoundsCafe.add(vaccum);
 
     MoreSoundsModel fan = MoreSoundsModel(
       name: "Fan",
@@ -579,7 +592,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    cafe.add(fan);
+    moreSoundsCafe.add(fan);
 
     // White Noise
 
@@ -590,7 +603,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    whitenoise.add(white);
+    moreSoundsWhitenoise.add(white);
 
     MoreSoundsModel brown = MoreSoundsModel(
       name: "Brown Noise",
@@ -599,7 +612,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    whitenoise.add(brown);
+    moreSoundsWhitenoise.add(brown);
 
     MoreSoundsModel pink = MoreSoundsModel(
       name: "Pink Noise",
@@ -608,7 +621,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    whitenoise.add(pink);
+    moreSoundsWhitenoise.add(pink);
 
     // Meditation
 
@@ -619,7 +632,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    meditation.add(guitar);
+    moreSoundsMeditation.add(guitar);
 
     MoreSoundsModel piano = MoreSoundsModel(
       name: "Piano",
@@ -628,7 +641,7 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    meditation.add(piano);
+    moreSoundsMeditation.add(piano);
 
     MoreSoundsModel flute = MoreSoundsModel(
       name: "Flute",
@@ -637,6 +650,453 @@ class CustomSoundCTL extends GetxController {
       isPlaying: false.obs,
       audioPlayer: null,
     );
-    meditation.add(flute);
+    moreSoundsMeditation.add(flute);
+  }
+
+  void fillJustAudio() async {
+    // Rain and Thunder
+    JustAudioModel lightrain = JustAudioModel(
+      name: "LightRain",
+      icon: CustomImages.lightRain.obs,
+      sound: customSounds.lightRain.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioRain.add(lightrain);
+
+    JustAudioModel heavyrain = JustAudioModel(
+      name: "Heavy Rain",
+      icon: CustomImages.heavyRain.obs,
+      sound: customSounds.heavyRain.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioRain.add(heavyrain);
+
+    JustAudioModel thunder = JustAudioModel(
+      name: "Thunder",
+      icon: CustomImages.thunder.obs,
+      sound: customSounds.thunder.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioRain.add(thunder);
+
+    JustAudioModel roofrain = JustAudioModel(
+      name: "Rain on Roof",
+      icon: CustomImages.roof.obs,
+      sound: customSounds.roof.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioRain.add(roofrain);
+
+    JustAudioModel windowrain = JustAudioModel(
+      name: "Rain on Window",
+      icon: CustomImages.window.obs,
+      sound: customSounds.window.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioRain.add(windowrain);
+
+    JustAudioModel snow = JustAudioModel(
+      name: "Snow",
+      icon: CustomImages.snow.obs,
+      sound: customSounds.snow.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioRain.add(snow);
+
+    JustAudioModel umbrellarain = JustAudioModel(
+      name: "Rain on Umbrella",
+      icon: CustomImages.umbrella.obs,
+      sound: customSounds.umbrella.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioRain.add(umbrellarain);
+
+    JustAudioModel tentrain = JustAudioModel(
+      name: "Rain on Tent",
+      icon: CustomImages.tent.obs,
+      sound: customSounds.tent.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioRain.add(tentrain);
+
+    JustAudioModel puddle = JustAudioModel(
+      name: "puddle",
+      icon: CustomImages.puddle.obs,
+      sound: customSounds.puddle.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioRain.add(puddle);
+
+    // Nature
+
+    JustAudioModel birdforest = JustAudioModel(
+      name: "Ocean",
+      icon: CustomImages.ocean.obs,
+      sound: customSounds.ocean.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioNature.add(birdforest);
+
+    JustAudioModel lake = JustAudioModel(
+      name: "Lake",
+      icon: CustomImages.lake.obs,
+      sound: customSounds.lake.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioNature.add(lake);
+
+    JustAudioModel creek = JustAudioModel(
+      name: "Creek",
+      icon: CustomImages.creek.obs,
+      sound: customSounds.creek.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioNature.add(creek);
+
+    JustAudioModel forest = JustAudioModel(
+      name: "Forest",
+      icon: CustomImages.forest.obs,
+      sound: customSounds.forest.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioNature.add(forest);
+
+    JustAudioModel windleaves = JustAudioModel(
+      name: "Wind Leaves",
+      icon: CustomImages.windLeaves.obs,
+      sound: customSounds.windLeaves.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioNature.add(windleaves);
+
+    JustAudioModel wind = JustAudioModel(
+      name: "Wind",
+      icon: CustomImages.wind.obs,
+      sound: customSounds.wind.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioNature.add(wind);
+
+    JustAudioModel waterfall = JustAudioModel(
+      name: "WaterFall",
+      icon: CustomImages.waterfall.obs,
+      sound: customSounds.waterFall.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioNature.add(waterfall);
+
+    JustAudioModel drip = JustAudioModel(
+      name: "Drip",
+      icon: CustomImages.drip.obs,
+      sound: customSounds.drip.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioNature.add(drip);
+
+    JustAudioModel underwater = JustAudioModel(
+      name: "UnderWater",
+      icon: CustomImages.underwater.obs,
+      sound: customSounds.underwater.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioNature.add(underwater);
+
+    JustAudioModel farm = JustAudioModel(
+      name: "Farm",
+      icon: CustomImages.farm.obs,
+      sound: customSounds.farm.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioNature.add(farm);
+
+    JustAudioModel grassland = JustAudioModel(
+      name: "Grassland",
+      icon: CustomImages.grassland.obs,
+      sound: customSounds.grassland.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioNature.add(grassland);
+
+    JustAudioModel fire = JustAudioModel(
+      name: "Fire",
+      icon: CustomImages.fire.obs,
+      sound: customSounds.fire.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioNature.add(fire);
+
+    // Animal
+
+    JustAudioModel bird = JustAudioModel(
+      name: "Bird",
+      icon: CustomImages.bird.obs,
+      sound: customSounds.bird.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioAnimal.add(bird);
+
+    JustAudioModel bird2 = JustAudioModel(
+      name: "Bird2",
+      icon: CustomImages.bird2.obs,
+      sound: customSounds.bird2.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioAnimal.add(bird2);
+
+    JustAudioModel seagull = JustAudioModel(
+      name: "Seagull",
+      icon: CustomImages.seagull.obs,
+      sound: customSounds.seagull.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioAnimal.add(seagull);
+
+    JustAudioModel frog = JustAudioModel(
+      name: "Frog",
+      icon: CustomImages.frog.obs,
+      sound: customSounds.frog.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioAnimal.add(frog);
+
+    JustAudioModel frog2 = JustAudioModel(
+      name: "Frog2",
+      icon: CustomImages.frog2.obs,
+      sound: customSounds.frog2.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioAnimal.add(frog2);
+
+    JustAudioModel cricket = JustAudioModel(
+      name: "Cricket",
+      icon: CustomImages.cricket.obs,
+      sound: customSounds.cricket.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioAnimal.add(cricket);
+
+    JustAudioModel cicada = JustAudioModel(
+      name: "Cicada",
+      icon: CustomImages.cicada.obs,
+      sound: customSounds.cicada.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioAnimal.add(cicada);
+
+    JustAudioModel wolf = JustAudioModel(
+      name: "Wolf",
+      icon: CustomImages.wolf.obs,
+      sound: customSounds.wolf.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioAnimal.add(wolf);
+
+    JustAudioModel loon = JustAudioModel(
+      name: "Loon",
+      icon: CustomImages.loon.obs,
+      sound: customSounds.loon.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioAnimal.add(loon);
+
+    // Transport
+
+    JustAudioModel train = JustAudioModel(
+      name: "Train",
+      icon: CustomImages.train.obs,
+      sound: customSounds.train.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioTransport.add(train);
+
+    JustAudioModel car = JustAudioModel(
+      name: "Car",
+      icon: CustomImages.car.obs,
+      sound: customSounds.car.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioTransport.add(car);
+
+    JustAudioModel airplane = JustAudioModel(
+      name: "Airplane",
+      icon: CustomImages.airplane.obs,
+      sound: customSounds.airplane.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioTransport.add(airplane);
+
+    // Cafe and Instrument
+
+    JustAudioModel cafee = JustAudioModel(
+      name: "Cafe",
+      icon: CustomImages.cafe.obs,
+      sound: customSounds.cafe.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioCafe.add(cafee);
+
+    JustAudioModel crowd = JustAudioModel(
+      name: "Crowd",
+      icon: CustomImages.crowd.obs,
+      sound: customSounds.crowd.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioCafe.add(crowd);
+
+    JustAudioModel heartbeat = JustAudioModel(
+      name: "Heart Beat",
+      icon: CustomImages.heartbeat.obs,
+      sound: customSounds.heartbeat.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioCafe.add(heartbeat);
+
+    JustAudioModel construction = JustAudioModel(
+      name: "Construction Site",
+      icon: CustomImages.construction.obs,
+      sound: customSounds.construction.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioCafe.add(construction);
+
+    JustAudioModel lullaby = JustAudioModel(
+      name: "Lullaby",
+      icon: CustomImages.lullaby.obs,
+      sound: customSounds.lullaby.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioCafe.add(lullaby);
+
+    JustAudioModel dryer = JustAudioModel(
+      name: "Dryer",
+      icon: CustomImages.dryer.obs,
+      sound: customSounds.dryer.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioCafe.add(dryer);
+
+    JustAudioModel hairdryer = JustAudioModel(
+      name: "Hair Dryer",
+      icon: CustomImages.hairDryer.obs,
+      sound: customSounds.hairDryer.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioCafe.add(hairdryer);
+
+    JustAudioModel vaccum = JustAudioModel(
+      name: "Vacuum Cleaner",
+      icon: CustomImages.vacuum.obs,
+      sound: customSounds.vacuumCleaner.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioCafe.add(vaccum);
+
+    JustAudioModel fan = JustAudioModel(
+      name: "Fan",
+      icon: CustomImages.fan.obs,
+      sound: customSounds.fan.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioCafe.add(fan);
+
+    // White Noise
+
+    JustAudioModel white = JustAudioModel(
+      name: "White Noise",
+      icon: CustomImages.white.obs,
+      sound: customSounds.white.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioWhitenoise.add(white);
+
+    JustAudioModel brown = JustAudioModel(
+      name: "Brown Noise",
+      icon: CustomImages.brown.obs,
+      sound: customSounds.brown.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioWhitenoise.add(brown);
+
+    JustAudioModel pink = JustAudioModel(
+      name: "Pink Noise",
+      icon: CustomImages.pink.obs,
+      sound: customSounds.pink.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioWhitenoise.add(pink);
+
+    // Meditation
+
+    JustAudioModel guitar = JustAudioModel(
+      name: "Guitar",
+      icon: CustomImages.guitar.obs,
+      sound: customSounds.guitar.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioMeditation.add(guitar);
+
+    JustAudioModel piano = JustAudioModel(
+      name: "Piano",
+      icon: CustomImages.piano.obs,
+      sound: customSounds.piano.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioMeditation.add(piano);
+
+    JustAudioModel flute = JustAudioModel(
+      name: "Flute",
+      icon: CustomImages.flute.obs,
+      sound: customSounds.flute.obs,
+      isPlaying: false.obs,
+      audioPlayer: null,
+    );
+    justAudioMeditation.add(flute);
   }
 }
