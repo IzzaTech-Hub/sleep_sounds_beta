@@ -7,8 +7,6 @@ import 'package:sleep_sounds_beta/app/data/more_sounds_model.dart';
 import 'package:sleep_sounds_beta/app/modules/utills/images.dart';
 import 'package:sleep_sounds_beta/app/modules/utills/sounds.dart';
 
-
-
 class CustomSoundCTL extends GetxController {
   RxList<MoreSoundsModel> rain = <MoreSoundsModel>[].obs;
   RxList<MoreSoundsModel> nature = <MoreSoundsModel>[].obs;
@@ -55,6 +53,7 @@ class CustomSoundCTL extends GetxController {
   void onInit() {
     WidgetsBinding.instance.addObserver;
     // TODO: implement onInit
+    fillMoreSounds();
     super.onInit();
     // more_sound = (Get.arguments as MoreSoundsModel).obs;
     // title.value = more_sound!.value.name;
@@ -64,7 +63,6 @@ class CustomSoundCTL extends GetxController {
   @override
   void onClose() {
     // TODO: implement onClose
-    stopAllSounds();
     super.onClose();
   }
 
@@ -118,8 +116,10 @@ class CustomSoundCTL extends GetxController {
   }
 
   void stopAllSounds() {
-    selectedSounds.forEach((sound) => stopSound(sound));
-    selectedSounds.value = [];
+    if (selectedSounds.length > 0) {
+      selectedSounds.forEach((sound) => stopSound(sound));
+      selectedSounds.value = [];
+    }
   }
 
   Future<void> stopSelectedSounds() async {
