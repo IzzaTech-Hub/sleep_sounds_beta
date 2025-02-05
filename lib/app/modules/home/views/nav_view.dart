@@ -3,14 +3,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sleep_sounds_beta/app/modules/home/controller/app_lovin_provider.dart';
+import 'package:sleep_sounds_beta/app/modules/home/controller/custom_sound_ctl.dart';
 import '../../utills/size_config.dart';
 import '../controller/nav_view_ctl.dart';
+import 'custom_sound_view.dart';
 
 class NavView extends GetView<NavCTL> {
   const NavView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    CustomSoundCTL customSoundCTL = Get.find<CustomSoundCTL>();
     SizeConfig().init(context);
     return Scaffold(
       body: Obx(() =>
@@ -20,6 +23,7 @@ class NavView extends GetView<NavCTL> {
             backgroundColor: Colors.black,
             itemCornerRadius: 15,
             onItemSelected: (index) {
+              customSoundCTL.stopAllSounds();
               controller.current_index.value = index;
               controller.navAdCounter++;
               if (controller.navAdCounter == 4) {

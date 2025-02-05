@@ -255,57 +255,57 @@ class CustomSoundView extends GetView<CustomSoundCTL> {
           ),
         ]),
       ),
-      Obx(
-        () => Align(
-            alignment: Alignment.bottomCenter,
-            child: controller.selectedSounds.length <= 0
-                ? Container()
-                : Container(
-                    margin: EdgeInsets.only(
-                        bottom: SizeConfig.blockSizeVertical * 2),
-                    height: SizeConfig.blockSizeVertical * 7,
-                    width: SizeConfig.blockSizeHorizontal * 50,
-                    decoration: BoxDecoration(
-                        color: Color(0xFF010C21),
-                        // gradient: LinearGradient(
-                        //     colors: [Color(0xFF000A1F), Color(0xFF002940)],
-                        //     begin: Alignment.topCenter,
-                        //     end: Alignment.bottomCenter),
-                        borderRadius: BorderRadius.circular(
-                            SizeConfig.blockSizeHorizontal * 4)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Icon(
-                          CupertinoIcons.timer,
-                          color: Colors.transparent,
-                          size: SizeConfig.blockSizeHorizontal * 6,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            if (controller.isPlaying.value) {
-                              controller.stopSelectedSounds();
-                            } else {
-                              controller.playSelectedSounds();
-                            }
-                          },
-                          child: Icon(
-                            controller.isPlaying.value
-                                ? Icons.pause
-                                : Icons.play_arrow,
-                            color: Colors.white,
-                            size: SizeConfig.blockSizeHorizontal * 9,
-                          ),
-                        ),
-                        Icon(
-                          Icons.volume_up,
-                          color: Colors.transparent,
-                          size: SizeConfig.blockSizeHorizontal * 8,
-                        )
-                      ],
-                    ),
-                  )),
-      ),
+      // Obx(
+      //   () => Align(
+      //       alignment: Alignment.bottomCenter,
+      //       child: controller.selectedSounds.length <= 0
+      //           ? Container()
+      //           : Container(
+      //               margin: EdgeInsets.only(
+      //                   bottom: SizeConfig.blockSizeVertical * 2),
+      //               height: SizeConfig.blockSizeVertical * 7,
+      //               width: SizeConfig.blockSizeHorizontal * 50,
+      //               decoration: BoxDecoration(
+      //                   color: Color(0xFF010C21),
+      //                   // gradient: LinearGradient(
+      //                   //     colors: [Color(0xFF000A1F), Color(0xFF002940)],
+      //                   //     begin: Alignment.topCenter,
+      //                   //     end: Alignment.bottomCenter),
+      //                   borderRadius: BorderRadius.circular(
+      //                       SizeConfig.blockSizeHorizontal * 4)),
+      //               child: Row(
+      //                 mainAxisAlignment: MainAxisAlignment.spaceAround,
+      //                 children: [
+      //                   Icon(
+      //                     CupertinoIcons.timer,
+      //                     color: Colors.transparent,
+      //                     size: SizeConfig.blockSizeHorizontal * 6,
+      //                   ),
+      //                   GestureDetector(
+      //                     onTap: () {
+      //                       if (controller.isPlaying.value) {
+      //                         controller.stopSelectedSounds();
+      //                       } else {
+      //                         controller.playSelectedSounds();
+      //                       }
+      //                     },
+      //                     child: Icon(
+      //                       controller.isPlaying.value
+      //                           ? Icons.pause
+      //                           : Icons.play_arrow,
+      //                       color: Colors.white,
+      //                       size: SizeConfig.blockSizeHorizontal * 9,
+      //                     ),
+      //                   ),
+      //                   Icon(
+      //                     Icons.volume_up,
+      //                     color: Colors.transparent,
+      //                     size: SizeConfig.blockSizeHorizontal * 8,
+      //                   )
+      //                 ],
+      //               ),
+      //             )),
+      // ),
     ]));
   }
 

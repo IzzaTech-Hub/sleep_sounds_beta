@@ -1,4 +1,5 @@
-import 'package:audioplayers/audioplayers.dart';
+// import 'package:audioplayers/audioplayers.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -18,7 +19,7 @@ class CustomSoundCTL extends GetxController {
   RxList<MoreSoundsModel> selectedSounds = <MoreSoundsModel>[].obs;
 
   Rx<bool> isPlaying = false.obs;
-  AudioCache player = AudioCache();
+  // AudioCache player = AudioCache();
   AudioPlayer instance = AudioPlayer();
   RxBool isLoop = false.obs;
   RxBool isPaused = false.obs;
@@ -27,63 +28,25 @@ class CustomSoundCTL extends GetxController {
   // Rx<MoreSoundsModel>? more_sound;
   // Rx<String> Icon = "".obs;
   // Rx<String> title = "".obs;
+  Future<void> startAudioAndVibration(MoreSoundsModel sound) async {
+    sound.audioPlayer = AudioPlayer();
 
-  startAudioAndVibration(MoreSoundsModel sound) async {
-    isPlaying.value = true;
-    check.value = true;
-//     // AudioCache();
-//     if (isLoop.value) {
-//       // instance = await player.loop(sound.sound.value);
-//       sound.audioPlayer = await player.loop(sound.sound.value);
-//     } else {
-//       print("value of t ${sound.sound.value}");
-//       // instance = await player.loop(sound.sound.value);
-//       sound.audioPlayer = await player.loop(sound.sound.value);
-//     }
-//  instance.onPlayerCompletion.listen((event) {
-//       // Set the flag to true when the sound is complete
-//       // Vibration.cancel();
-//       isPlaying.value = false;
-//     });
-  sound.audioPlayer = AudioPlayer();
-
-    if (isLoop.value) {
-      await sound.audioPlayer!.setSource(AssetSource(sound.sound.value));
-      await sound.audioPlayer!.setReleaseMode(ReleaseMode.loop);
-      await sound.audioPlayer!.resume();
-    } else {
-      print("value of t ${sound.sound.value}");
-      await sound.audioPlayer!.play(AssetSource(sound.sound.value));
+    try {
+      await sound.audioPlayer!
+          .setAudioSource(AudioSource.asset("assets/${sound.sound.value}"));
+      if (isLoop.value) {
+        sound.audioPlayer!.setLoopMode(LoopMode.one);
+      }
+      await sound.audioPlayer!.play();
+      sound.isPlaying.value = true;
+    } catch (e) {
+      print("Error playing sound: $e");
     }
-
-    sound.audioPlayer!.onPlayerComplete.listen((event) {
-      isPlaying.value = false;
-      sound.isPlaying.value = false;
-    });
-
-    // audioTimer = Timer(Duration(seconds: selectedDuration.value), () {
-    //   stopAudioAndVibration();
-    //   check.value = false;
-    // });
-
-    // countDownController.start();
-    // countDownController.restart(duration: selectedDuration.value);
-
-    // String? abc = countDownController.getTime();
-    // print("abc ${abc}");
-
-   
   }
 
-  // Function to stop the playback of a specific sound
   void stopSound(MoreSoundsModel sound) {
-    if (sound.audioPlayer != null) {
-      sound.audioPlayer!.stop();
-      if (selectedSounds.length <= 0) {
-      // if (selectedSounds.isEmpty) {
-        sound.isPlaying.value = false;
-      }
-    }
+    sound.audioPlayer?.stop();
+    sound.isPlaying.value = false;
   }
 
   @override
@@ -104,20 +67,19 @@ class CustomSoundCTL extends GetxController {
     super.onClose();
   }
 
-  playAudio(String h) async {
-    try {
-      // await instance.stop();
+  // playAudio(String h) async {
+  //   try {
+  //     // await instance.stop();
 
-      // await instance.play(h);
-      await instance.play(AssetSource(h));
-    } catch (e) {
-      print("e ${e}");
-    }
-  }
+  //     // await instance.play(h);
+  //     await instance.play(AssetSource(h));
+  //   } catch (e) {
+  //     print("e ${e}");
+  //   }
+  // }
 
   void toggleSoundSelection(MoreSoundsModel sound) {
     if (selectedSounds.contains(sound)) {
-      // If the sound is already selected, remove it from the list and stop its playback
       selectedSounds.remove(sound);
       stopSound(sound);
     } else {
@@ -125,57 +87,38 @@ class CustomSoundCTL extends GetxController {
         Fluttertoast.showToast(
             msg: "Maximum number of sounds reached (10).",
             toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.TOP,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.black,
-            textColor: Colors.white,
-            fontSize: 14.0);
+            gravity: ToastGravity.TOP);
         return;
       }
-      // If the sound is not selected, add it to the list and start its playback
       selectedSounds.add(sound);
-
       startAudioAndVibration(sound);
     }
   }
 
-  // void toggleSoundSelection(MoreSoundsModel sound) {
-  //   if (selectedSounds.contains(sound)) {
-  //     // If the sound is already selected, remove it from the list and stop its playback
-  //     selectedSounds.remove(sound);
-  //     stopSound(sound);
+  // Future<void> togglePlayPause(MoreSoundsModel sound) async {
+  //   if (sound.isPlaying.value) {
+  //     // Pause the sound
+  //     await instance.pause();
+  //     sound.isPlaying.value = false;
   //   } else {
-  //     // If the sound is not selected, add it to the list
-  //     selectedSounds.add(sound);
+  //     // Play the sound
+  //     // await instance.play(sound.sound.value);
+  //     await instance.play(AssetSource(sound.sound.value));
+  //     sound.isPlaying.value = true;
   //   }
   // }
 
-  Future<void> togglePlayPause(MoreSoundsModel sound) async {
-    if (sound.isPlaying.value) {
-      // Pause the sound
-      await instance.pause();
-      sound.isPlaying.value = false;
-    } else {
-      // Play the sound
-      // await instance.play(sound.sound.value);
-      await instance.play(AssetSource(sound.sound.value));
-      sound.isPlaying.value = true;
+  Future<void> playSelectedSounds() async {
+    if (selectedSounds.isEmpty) return;
+    isPlaying.value = true;
+    for (final sound in selectedSounds) {
+      await startAudioAndVibration(sound);
     }
   }
 
-  Future<void> playSelectedSounds() async {
-    if (selectedSounds.isEmpty) return;
-
-    // Play the selected sounds
-    isPlaying.value = true;
-    for (final sound in selectedSounds) {
-      print("selectedsoundname ${sound.name}");
-      print("selectedsoundpath ${sound.sound}");
-      // await instance.play(sound.sound.value);
-      sound.isPlaying.value = true;
-      startAudioAndVibration(sound);
-      // playAudio(sound.sound.value);
-    }
+  void stopAllSounds() {
+    selectedSounds.forEach((sound) => stopSound(sound));
+    selectedSounds.value = [];
   }
 
   Future<void> stopSelectedSounds() async {
