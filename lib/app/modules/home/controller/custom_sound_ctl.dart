@@ -26,7 +26,7 @@ class CustomSoundCTL extends GetxController {
   RxList<JustAudioModel> justAudioMeditation = <JustAudioModel>[].obs;
 
   RxList<MoreSoundsModel> selectedSounds = <MoreSoundsModel>[].obs;
-  RxList<MoreSoundsModel> justAudioSelectedSounds = <MoreSoundsModel>[].obs;
+  RxList<JustAudioModel> justAudioSelectedSounds = <JustAudioModel>[].obs;
 
   Rx<bool> isPlaying = false.obs;
   AudioCache player = AudioCache();
@@ -88,8 +88,9 @@ class CustomSoundCTL extends GetxController {
 
   // Function to stop the playback of a specific sound
   void stopSound(MoreSoundsModel moreSounds, JustAudioModel justAudio) {
-    if (moreSounds.audioPlayer != null) {
+    if (moreSounds.audioPlayer != null && justAudio.audioPlayer != null) {
       moreSounds.audioPlayer!.stop();
+      justAudio.audioPlayer!.stop();
       if (selectedSounds.length <= 0 && justAudioSelectedSounds.length <= 0) {
         // if (selectedSounds.isEmpty) {
         moreSounds.isPlaying.value = false;
@@ -128,11 +129,14 @@ class CustomSoundCTL extends GetxController {
     }
   }
 
-  void toggleSoundSelection(MoreSoundsModel sound) {
-    if (selectedSounds.contains(sound)) {
-      // If the sound is already selected, remove it from the list and stop its playback
-      selectedSounds.remove(sound);
-      stopSound(sound);
+  void toggleSoundSelection(
+      MoreSoundsModel moreSounds, JustAudioModel justAudio) {
+    if (selectedSounds.contains(moreSounds) &&
+        justAudioSelectedSounds.contains(justAudio)) {
+      // If the sounds is already selected, remove it from the list and stop its playback
+      selectedSounds.remove(moreSounds);
+      justAudioSelectedSounds.remove(justAudio);
+      stopSound(moreSounds, justAudio);
     } else {
       if (selectedSounds.length >= 10) {
         Fluttertoast.showToast(
@@ -146,9 +150,10 @@ class CustomSoundCTL extends GetxController {
         return;
       }
       // If the sound is not selected, add it to the list and start its playback
-      selectedSounds.add(sound);
+      selectedSounds.add(moreSounds);
+      justAudioSelectedSounds.add(justAudio);
 
-      startAudioAndVibration(sound);
+      startAudioAndVibration(moreSounds, justAudio);
     }
   }
 
