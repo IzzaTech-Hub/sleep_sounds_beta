@@ -6,6 +6,8 @@ import 'package:sleep_sounds_beta/app/data/more_sounds_model.dart';
 import 'package:sleep_sounds_beta/app/modules/utills/images.dart';
 import 'package:sleep_sounds_beta/app/modules/utills/sounds.dart';
 
+
+
 class CustomSoundCTL extends GetxController {
   RxList<MoreSoundsModel> rain = <MoreSoundsModel>[].obs;
   RxList<MoreSoundsModel> nature = <MoreSoundsModel>[].obs;
