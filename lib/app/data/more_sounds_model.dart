@@ -1,4 +1,5 @@
-import 'package:audioplayers/audioplayers.dart';
+// import 'package:audioplayers/audioplayers.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:get/get.dart';
 
 class MoreSoundsModel {
