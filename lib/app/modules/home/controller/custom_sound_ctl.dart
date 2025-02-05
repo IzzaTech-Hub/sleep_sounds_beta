@@ -30,12 +30,12 @@ class CustomSoundCTL extends GetxController {
   // Rx<String> title = "".obs;
   Future<void> startAudioAndVibration(MoreSoundsModel sound) async {
     sound.audioPlayer = AudioPlayer();
-
+    isLoop.value = true;
     try {
       await sound.audioPlayer!
           .setAudioSource(AudioSource.asset("assets/${sound.sound.value}"));
       if (isLoop.value) {
-        sound.audioPlayer!.setLoopMode(LoopMode.one);
+        sound.audioPlayer!.setLoopMode(LoopMode.all);
       }
       await sound.audioPlayer!.play();
       sound.isPlaying.value = true;
@@ -54,8 +54,6 @@ class CustomSoundCTL extends GetxController {
     WidgetsBinding.instance.addObserver;
     // TODO: implement onInit
     super.onInit();
-
-    fillMoreSounds();
     // more_sound = (Get.arguments as MoreSoundsModel).obs;
     // title.value = more_sound!.value.name;
     // Icon.value = more_sound!.value.icon.value;
@@ -64,6 +62,7 @@ class CustomSoundCTL extends GetxController {
   @override
   void onClose() {
     // TODO: implement onClose
+    stopAllSounds();
     super.onClose();
   }
 
