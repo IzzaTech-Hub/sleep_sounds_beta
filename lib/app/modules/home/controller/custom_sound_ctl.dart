@@ -7,8 +7,6 @@ import 'package:sleep_sounds_beta/app/data/more_sounds_model.dart';
 import 'package:sleep_sounds_beta/app/modules/utills/images.dart';
 import 'package:sleep_sounds_beta/app/modules/utills/sounds.dart';
 
-
-
 class CustomSoundCTL extends GetxController {
   RxList<MoreSoundsModel> rain = <MoreSoundsModel>[].obs;
   RxList<MoreSoundsModel> nature = <MoreSoundsModel>[].obs;
@@ -32,12 +30,12 @@ class CustomSoundCTL extends GetxController {
   // Rx<String> title = "".obs;
   Future<void> startAudioAndVibration(MoreSoundsModel sound) async {
     sound.audioPlayer = AudioPlayer();
-
+    isLoop.value = true;
     try {
       await sound.audioPlayer!
           .setAudioSource(AudioSource.asset("assets/${sound.sound.value}"));
       if (isLoop.value) {
-        sound.audioPlayer!.setLoopMode(LoopMode.one);
+        sound.audioPlayer!.setLoopMode(LoopMode.all);
       }
       await sound.audioPlayer!.play();
       sound.isPlaying.value = true;
@@ -55,9 +53,8 @@ class CustomSoundCTL extends GetxController {
   void onInit() {
     WidgetsBinding.instance.addObserver;
     // TODO: implement onInit
-    super.onInit();
-
     fillMoreSounds();
+    super.onInit();
     // more_sound = (Get.arguments as MoreSoundsModel).obs;
     // title.value = more_sound!.value.name;
     // Icon.value = more_sound!.value.icon.value;
@@ -119,8 +116,10 @@ class CustomSoundCTL extends GetxController {
   }
 
   void stopAllSounds() {
-    selectedSounds.forEach((sound) => stopSound(sound));
-    selectedSounds.value = [];
+    if (selectedSounds.length > 0) {
+      selectedSounds.forEach((sound) => stopSound(sound));
+      selectedSounds.value = [];
+    }
   }
 
   Future<void> stopSelectedSounds() async {
