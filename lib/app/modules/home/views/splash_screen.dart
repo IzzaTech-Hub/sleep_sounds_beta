@@ -15,20 +15,18 @@ class SplashScreen extends GetView<SplashController> {
     SizeConfig().init(context);
 
     return Scaffold(
-      body: Container(
-        width: SizeConfig.screenWidth,
-        height: SizeConfig.screenHeight,
-        color: Colors.black,
-        child: Stack(
+      backgroundColor: Colors.black,
+      body: Padding(
+        padding:  EdgeInsets.only(top: SizeConfig.blockSizeVertical * 10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Padding(
-              padding: EdgeInsets.only(
-                  top: SizeConfig.blockSizeVertical * 20,
-                  left: SizeConfig.blockSizeHorizontal * 19),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(SizeConfig.blockSizeHorizontal *8),
               child: Image.asset(
                 AppImages.splash,
                 width: SizeConfig.blockSizeHorizontal * 60,
-                height: SizeConfig.blockSizeVertical * 30,
+                // height: SizeConfig.blockSizeVertical * 30,
                 // fit: BoxFit.cover,
               ),
             ),
@@ -40,31 +38,22 @@ class SplashScreen extends GetView<SplashController> {
             //     color: Colors.black,
             //   ),
             // ),
-
-            Align(
-              alignment: Alignment.center,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // verticalSpace(SizeConfig.blockSizeVertical * 5),
-                  Padding(
-                    padding:
-                        EdgeInsets.only(top: SizeConfig.blockSizeVertical * 15),
-                    child: Text("Sleep Sounds",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: SizeConfig.blockSizeHorizontal * 6,
-                            fontWeight: FontWeight.bold)),
-                  ),
-                  verticalSpace(SizeConfig.blockSizeVertical * 1),
-                  Text("Relaxing Melodies for Sleep",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: SizeConfig.blockSizeHorizontal * 4,
-                          fontWeight: FontWeight.bold)),
-                ],
-              ),
+        
+            Padding(
+              padding:
+                  EdgeInsets.only(top: SizeConfig.blockSizeVertical * 15),
+              child: Text("Sleep Sounds",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: SizeConfig.blockSizeHorizontal * 6,
+                      fontWeight: FontWeight.bold)),
             ),
+            verticalSpace(SizeConfig.blockSizeVertical * 1),
+            Text("Relaxing Melodies for Sleep",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: SizeConfig.blockSizeHorizontal * 4,
+                    fontWeight: FontWeight.bold)),
             Container(
               margin: EdgeInsets.only(bottom: SizeConfig.blockSizeVertical * 5),
               child: Align(

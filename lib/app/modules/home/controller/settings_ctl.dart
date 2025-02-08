@@ -13,7 +13,7 @@ class SettingsCTL extends GetxController {
 
   ShareApp() {
     Share.share(
-        "Consider downloading this exceptional app, available on the Google Play Store at the following link: https://play.google.com/store/apps/details?id=///add package////");
+        "Consider downloading this exceptional app, available on the Google Play Store at the following link: https://play.google.com/store/apps/details?id=sleepandrelax.white.noise.sleepingsounds");
   }
 
   void rateApp() async {
