@@ -33,7 +33,7 @@ class AppLovinProvider {
   var isWidgetMRecShowing = false;
 
   void init() {
-    if (kReleaseMode) {
+    if (kReleaseMode || kDebugMode) {
       initializePlugin();
     }
   }

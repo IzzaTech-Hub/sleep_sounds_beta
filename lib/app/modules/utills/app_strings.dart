@@ -8,6 +8,5 @@ class AppStrings {
   // static const MAX_MREC_ID = "";
   // static const MAX_Reward_ID = "";
 
-  static const MAX_SDK =
-      "eubavoi3bf8-3fbjJAEUHD";
+  static const MAX_SDK = "eubavoi3bf8-3fbjJAEUHD";
 }

@@ -255,6 +255,45 @@ class CustomSoundView extends GetView<CustomSoundCTL> {
           ),
         ]),
       ),
+      Obx(() => Align(
+            alignment: Alignment.bottomRight,
+            child: GestureDetector(
+              onTap: controller.customSoundTimerIncrement,
+              child: Container(
+                width: 90,
+                height: 90,
+                padding: EdgeInsets.all(SizeConfig.blockSizeHorizontal * 3),
+                margin: EdgeInsets.all(SizeConfig.blockSizeVertical * 2),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle, // Makes it a clock-like circle
+                  color: Colors.grey[900], // Dark shade
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.5),
+                      blurRadius: 10,
+                      spreadRadius: 2,
+                    ),
+                  ],
+                  border: Border.all(
+                    color: Colors.white
+                        .withOpacity(0.2), // Subtle border for depth
+                    width: 2,
+                  ),
+                ),
+                child: Center(
+                  child: Text(
+                    '${controller.customSounderTimer.value}s',
+                    style: TextStyle(
+                      fontSize: SizeConfig.blockSizeHorizontal * 6,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ))
+
       // Obx(
       //   () => Align(
       //       alignment: Alignment.bottomCenter,
