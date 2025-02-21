@@ -1,4 +1,6 @@
 // import 'package:audioplayers/audioplayers.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -6,6 +8,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:sleep_sounds_beta/app/data/more_sounds_model.dart';
 import 'package:sleep_sounds_beta/app/modules/utills/images.dart';
 import 'package:sleep_sounds_beta/app/modules/utills/sounds.dart';
+import 'dart:developer' as developer;
 
 class CustomSoundCTL extends GetxController {
   RxList<MoreSoundsModel> rain = <MoreSoundsModel>[].obs;
@@ -24,23 +27,57 @@ class CustomSoundCTL extends GetxController {
   RxBool isLoop = false.obs;
   RxBool isPaused = false.obs;
   RxBool check = false.obs;
+  RxInt customSounderTimer = 5.obs;
 
   // Rx<MoreSoundsModel>? more_sound;
   // Rx<String> Icon = "".obs;
   // Rx<String> title = "".obs;
   Future<void> startAudioAndVibration(MoreSoundsModel sound) async {
+    // Ensure a fresh instance of the player
     sound.audioPlayer = AudioPlayer();
     isLoop.value = true;
+
+    int playDuration =
+        customSounderTimer.value; // Store the duration in a local variable
+    developer.log("⏳ Timer set for: ${playDuration}s");
+
     try {
       await sound.audioPlayer!
           .setAudioSource(AudioSource.asset("assets/${sound.sound.value}"));
+
       if (isLoop.value) {
         sound.audioPlayer!.setLoopMode(LoopMode.all);
       }
-      await sound.audioPlayer!.play();
+
+      sound.audioPlayer!.play();
       sound.isPlaying.value = true;
+
+      developer.log("🎵 Audio started playing");
+
+      // Ensure delay executes by using a separate function
+      stopAudioAfterDelay(sound, playDuration);
     } catch (e) {
-      print("Error playing sound: $e");
+      print("❌ Error playing sound: $e");
+    }
+  }
+
+  void stopAudioAfterDelay(MoreSoundsModel sound, int duration) {
+    if (duration > 0) {
+      Future.delayed(Duration(seconds: duration), () async {
+        developer.log("⏳ ${duration}s has elapsed. Checking sound status...");
+
+        if (sound.audioPlayer != null && sound.audioPlayer!.playing) {
+          try {
+            print("🔇 Stopping audio after $duration seconds...");
+            toggleSoundSelection(sound);
+            print("✅ Audio stopped successfully");
+          } catch (e) {
+            print("❌ Error stopping audio: $e");
+          }
+        }
+      });
+    } else {
+      developer.log("⚠️ Invalid duration: $duration. Skipping stop timer.");
     }
   }
 
@@ -76,6 +113,14 @@ class CustomSoundCTL extends GetxController {
   //     print("e ${e}");
   //   }
   // }
+
+  void customSoundTimerIncrement() {
+    if (customSounderTimer.value == 30) {
+      customSounderTimer.value = 5;
+    } else {
+      customSounderTimer.value += 5; // Increase by 5
+    }
+  }
 
   void toggleSoundSelection(MoreSoundsModel sound) {
     if (selectedSounds.contains(sound)) {
