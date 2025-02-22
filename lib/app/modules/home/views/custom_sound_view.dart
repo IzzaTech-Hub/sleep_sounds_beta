@@ -257,36 +257,67 @@ class CustomSoundView extends GetView<CustomSoundCTL> {
       ),
       Obx(() => Align(
             alignment: Alignment.bottomRight,
-            child: GestureDetector(
-              onTap: controller.customSoundTimerIncrement,
-              child: Container(
-                width: 90,
-                height: 90,
-                padding: EdgeInsets.all(SizeConfig.blockSizeHorizontal * 3),
-                margin: EdgeInsets.all(SizeConfig.blockSizeVertical * 2),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle, // Makes it a clock-like circle
-                  color: Colors.grey[900], // Dark shade
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.5),
-                      blurRadius: 10,
-                      spreadRadius: 2,
-                    ),
-                  ],
-                  border: Border.all(
-                    color: Colors.white
-                        .withOpacity(0.2), // Subtle border for depth
-                    width: 2,
-                  ),
-                ),
-                child: Center(
-                  child: Text(
-                    '${controller.customSounderTimer.value}s',
-                    style: TextStyle(
-                      fontSize: SizeConfig.blockSizeHorizontal * 6,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+            child: Material(
+              color: const Color.fromARGB(255, 15, 15, 15),
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(40),
+                  topRight: Radius.circular(2),
+                  bottomLeft: Radius.circular(2)),
+              clipBehavior: Clip.hardEdge,
+              child: InkWell(
+                // borderRadius: BorderRadius.only(
+                //     topLeft: Radius.circular(45),
+                //     topRight: Radius.circular(2),
+                //     bottomLeft: Radius.circular(2)),
+                // highlightColor: const Color.fromARGB(255, 16, 16, 16),
+                splashColor: const Color.fromARGB(255, 33, 33, 33),
+                onTap: controller.customSoundTimerIncrement,
+                child: Container(
+                  // color: Colors.red,
+                  width: 90,
+                  height: 90,
+                  padding: EdgeInsets.all(SizeConfig.blockSizeHorizontal * 3),
+                  // margin: EdgeInsets.all(SizeConfig.blockSizeVertical * 2),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(45),
+                          topRight: Radius.circular(2),
+                          bottomLeft: Radius.circular(2)),
+                      color: Colors.transparent),
+                  child: Center(
+                    child: Stack(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(
+                              bottom: SizeConfig.blockSizeVertical * 2),
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              '${controller.customSounderTimer.value}',
+                              style: TextStyle(
+                                fontSize: SizeConfig.blockSizeHorizontal * 6,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(
+                              bottom: SizeConfig.blockSizeVertical * 1),
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Text(
+                              'Minutes',
+                              style: TextStyle(
+                                fontSize: SizeConfig.blockSizeHorizontal * 3,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),

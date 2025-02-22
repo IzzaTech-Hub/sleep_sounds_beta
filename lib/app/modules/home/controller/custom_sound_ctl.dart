@@ -27,7 +27,7 @@ class CustomSoundCTL extends GetxController {
   RxBool isLoop = false.obs;
   RxBool isPaused = false.obs;
   RxBool check = false.obs;
-  RxInt customSounderTimer = 5.obs;
+  RxInt customSounderTimer = 1.obs;
 
   // Rx<MoreSoundsModel>? more_sound;
   // Rx<String> Icon = "".obs;
@@ -63,7 +63,7 @@ class CustomSoundCTL extends GetxController {
 
   void stopAudioAfterDelay(MoreSoundsModel sound, int duration) {
     if (duration > 0) {
-      Future.delayed(Duration(seconds: duration), () async {
+      Future.delayed(Duration(minutes: duration), () async {
         developer.log("⏳ ${duration}s has elapsed. Checking sound status...");
 
         if (sound.audioPlayer != null && sound.audioPlayer!.playing) {
@@ -115,10 +115,10 @@ class CustomSoundCTL extends GetxController {
   // }
 
   void customSoundTimerIncrement() {
-    if (customSounderTimer.value == 30) {
-      customSounderTimer.value = 5;
+    if (customSounderTimer.value == 10) {
+      customSounderTimer.value = 1;
     } else {
-      customSounderTimer.value += 5; // Increase by 5
+      customSounderTimer.value += 1; // Increase by 1
     }
   }
 
