@@ -13,7 +13,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
-    // DeviceOrientation.landscapeRight,
+    // DeviceOrientation.landscapeRight, 
   ]);
   await initializeDefault();
   runApp(const MyApp());
