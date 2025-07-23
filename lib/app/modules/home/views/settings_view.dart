@@ -1,18 +1,63 @@
-import 'package:applovin_max/applovin_max.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:sleep_sounds_beta/app/modules/home/controller/settings_ctl.dart';
+import 'package:sleep_sounds_beta/app/provider/admob_ads_provider.dart';
 
 import '../../utills/app_strings.dart';
 import '../../utills/images.dart';
 import '../../utills/size_config.dart';
 
 class SettingsView extends GetView<SettingsCTL> {
-  const SettingsView({super.key});
+   SettingsView({super.key});
+
+   // // // Banner Ad Implementation start // // //
+//? Commented by jamal start
+  late BannerAd myBanner;
+  RxBool isBannerLoaded = false.obs;
+
+  initBanner() {
+    BannerAdListener listener = BannerAdListener(
+      // Called when an ad is successfully received.
+      onAdLoaded: (Ad ad) {
+        print('Ad loaded.');
+        isBannerLoaded.value = true;
+      },
+      // Called when an ad request failed.
+      onAdFailedToLoad: (Ad ad, LoadAdError error) {
+        // Dispose the ad here to free resources.
+        ad.dispose();
+        print('Ad failed to load: $error');
+      },
+      // Called when an ad opens an overlay that covers the screen.
+      onAdOpened: (Ad ad) {
+        print('Ad opened.');
+      },
+      // Called when an ad removes an overlay that covers the screen.
+      onAdClosed: (Ad ad) {
+        print('Ad closed.');
+      },
+      // Called when an impression occurs on the ad.
+      onAdImpression: (Ad ad) {
+        print('Ad impression.');
+      },
+    );
+
+    myBanner = BannerAd(
+      adUnitId: AppStrings.ADMOB_BANNER,
+      size: AdSize.banner,
+      request: AdRequest(),
+      listener: listener,
+    );
+    myBanner.load();
+  } //? Commented by jamal end
+
+  /// Banner Ad Implementation End ///
 
   @override
   Widget build(BuildContext context) {
+    initBanner();
     return Scaffold(
         body: Stack(children: [
       Container(
@@ -60,30 +105,39 @@ class SettingsView extends GetView<SettingsCTL> {
             child: settings_btn("Invite your friends", Icons.person_add_alt_1,
                 "Spread the World", Icons.arrow_forward_ios_rounded),
           ),
-          Container(
-            margin: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 2),
-            // height: 60,
-            // color: Colors.amber,
-            child: Center(
-              child: MaxAdView(
-                  adUnitId: AppStrings.MAX_BANNER_ID,
-                  adFormat: AdFormat.banner,
-                  listener: AdViewAdListener(onAdLoadedCallback: (ad) {
-                    print('Banner widget ad loaded from ' + ad.networkName);
-                  }, onAdLoadFailedCallback: (adUnitId, error) {
-                    print('Banner widget ad failed to load with error code ' +
-                        error.code.toString() +
-                        ' and message: ' +
-                        error.message);
-                  }, onAdClickedCallback: (ad) {
-                    print('Banner widget ad clicked');
-                  }, onAdExpandedCallback: (ad) {
-                    print('Banner widget ad expanded');
-                  }, onAdCollapsedCallback: (ad) {
-                    print('Banner widget ad collapsed');
-                  })),
-            ),
-          ),
+
+          verticalSpace(SizeConfig.blockSizeVertical * 1),
+                          Obx(() => isBannerLoaded.value &&
+                    AdMobAdsProvider.instance.isAdEnable.value
+                ? Container(
+                    height: AdSize.banner.height.toDouble(),
+                    child: AdWidget(ad: myBanner))
+                : Container()), 
+            verticalSpace(SizeConfig.blockSizeVertical * 1),
+          // Container(
+          //   margin: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 2),
+          //   // height: 60,
+          //   // color: Colors.amber,
+          //   child: Center(
+          //     child: MaxAdView(
+          //         adUnitId: AppStrings.MAX_BANNER_ID,
+          //         adFormat: AdFormat.banner,
+          //         listener: AdViewAdListener(onAdLoadedCallback: (ad) {
+          //           print('Banner widget ad loaded from ' + ad.networkName);
+          //         }, onAdLoadFailedCallback: (adUnitId, error) {
+          //           print('Banner widget ad failed to load with error code ' +
+          //               error.code.toString() +
+          //               ' and message: ' +
+          //               error.message);
+          //         }, onAdClickedCallback: (ad) {
+          //           print('Banner widget ad clicked');
+          //         }, onAdExpandedCallback: (ad) {
+          //           print('Banner widget ad expanded');
+          //         }, onAdCollapsedCallback: (ad) {
+          //           print('Banner widget ad collapsed');
+          //         })),
+          //   ),
+          // ),
           Spacer(),
           Text(
             "Sleep Sounds",
@@ -93,7 +147,7 @@ class SettingsView extends GetView<SettingsCTL> {
                 color: Colors.white),
           ),
           Text(
-            "Version: 1.0.1",
+            "Version: 1.0.4",
             style: TextStyle(
                 fontSize: SizeConfig.blockSizeHorizontal * 3,
                 color: Colors.orange),

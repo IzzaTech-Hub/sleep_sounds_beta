@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../routes/app_pages.dart';
-import 'app_lovin_provider.dart';
 
 class SplashController extends GetxController {
   //TODO: Implement HomeControlle
@@ -18,7 +17,7 @@ class SplashController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    AppLovinProvider.instance.init();
+    // AppLovinProvider.instance.init();
     Timer? timer;
     timer = Timer.periodic(Duration(milliseconds: 500), (_) {
       int n = Random().nextInt(10) + 5;

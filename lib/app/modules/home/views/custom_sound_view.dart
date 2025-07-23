@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:sleep_sounds_beta/app/data/more_sounds_model.dart';
 import 'package:sleep_sounds_beta/app/modules/home/controller/app_lovin_provider.dart';
 import 'package:sleep_sounds_beta/app/modules/home/controller/custom_sound_ctl.dart';
+import 'package:sleep_sounds_beta/app/provider/admob_ads_provider.dart';
 import '../../utills/images.dart';
 import '../../utills/size_config.dart';
 
@@ -359,7 +360,8 @@ class CustomSoundView extends GetView<CustomSoundCTL> {
       children: [
         GestureDetector(
           onTap: () {
-            AppLovinProvider.instance.showInterstitial();
+            // AppLovinProvider.instance.showInterstitial();
+            AdMobAdsProvider.instance.showInterstitialAd((){});
             controller.toggleSoundSelection(customSound);
           },
           child: Obx(

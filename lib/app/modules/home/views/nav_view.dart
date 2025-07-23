@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sleep_sounds_beta/app/modules/home/controller/app_lovin_provider.dart';
 import 'package:sleep_sounds_beta/app/modules/home/controller/custom_sound_ctl.dart';
+import 'package:sleep_sounds_beta/app/provider/admob_ads_provider.dart';
 import '../../utills/size_config.dart';
 import '../controller/nav_view_ctl.dart';
 import 'custom_sound_view.dart';
@@ -27,7 +28,8 @@ class NavView extends GetView<NavCTL> {
               controller.current_index.value = index;
               controller.navAdCounter++;
               if (controller.navAdCounter == 4) {
-                AppLovinProvider.instance.showInterstitial();
+                // AppLovinProvider.instance.showInterstitial();
+                AdMobAdsProvider.instance.showInterstitialAd((){});
                 controller.navAdCounter = 0;
               }
             },

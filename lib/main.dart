@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:sleep_sounds_beta/app/provider/admob_ads_provider.dart';
 import 'package:sleep_sounds_beta/firebase_options.dart';
 // import 'package:sleep_sounds/app/modules/utills/colors.dart';
 
@@ -15,6 +16,9 @@ void main() async {
     DeviceOrientation.portraitUp,
     // DeviceOrientation.landscapeRight, 
   ]);
+
+  AdMobAdsProvider.instance.initialize();
+  
   await initializeDefault();
   runApp(const MyApp());
 }
