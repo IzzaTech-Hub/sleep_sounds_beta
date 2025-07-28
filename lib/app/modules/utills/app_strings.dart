@@ -15,11 +15,11 @@ class AppStrings {
   
    //Real IDS! Andriod
 
-  static String ADMOB_BANNER = "ca-app-pub-2735751208101773/2509914503";
-  static String ADMOB_INTERSTITIAL = "ca-app-pub-2735751208101773/9292829174";
-  static String ADMOB_NATIVE = "ca-app-pub-2735751208101773/4373698504";
-  static String ADMOB_APP_OPEN = "ca-app-pub-2735751208101773/6666665832";
-  static String ADMOB_REWARDED = "ca-app-pub-2735751208101773/5686780179";
+  static String ADMOB_BANNER = "ca-app-pub-2454590580016622/6504822228";
+  static String ADMOB_INTERSTITIAL = "ca-app-pub-2454590580016622/4740647551";
+  static String ADMOB_NATIVE = "ca-app-pub-2454590580016622/1874811065";
+  // static String ADMOB_APP_OPEN = "ca-app-pub-2735751208101773/6666665832";
+  // static String ADMOB_REWARDED = "ca-app-pub-2735751208101773/5686780179";
 
   // Test IDS!
 
